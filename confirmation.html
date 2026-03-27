@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  KANAP — Page de confirmation (confirmation.html)
+  - Affiche le numéro de commande reçu de l'API
+  - L'orderId est lu depuis l'URL, JAMAIS stocké en localStorage (spec)
+  Accessibilité : RGAA 4.1
+  Responsive : 320px et +
+  ============================================================
+-->
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+
+  <title>Kanap — Commande confirmée !</title>
+  <meta name="description" content="Votre commande de canapé Kanap a été confirmée. Merci pour votre confiance." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <meta name="theme-color" content="#1a6e7e" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+
+  <div id="sr-announcer"
+       role="status"
+       aria-live="polite"
+       aria-atomic="true"
+       class="sr-only"></div>
+
+  <!-- ============================================================
+       EN-TÊTE
+  ============================================================ -->
+  <header role="banner">
+    <div class="header-inner">
+      <a href="./index.html" class="logo-link" aria-label="Kanap — Retour à l'accueil">
+        <span class="logo-text" aria-hidden="true">KANAP</span>
+      </a>
+      <nav aria-label="Navigation principale">
+        <ul class="main-nav" role="list">
+          <li>
+            <a href="./index.html" class="nav-link">Accueil</a>
+          </li>
+          <li>
+            <a href="./cart.html"
+               class="cart-nav-link"
+               id="cart-nav-link"
+               aria-label="Panier — vide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   aria-hidden="true" focusable="false">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+              Panier
+              <span class="cart-count-badge"
+                    id="cart-count-badge"
+                    aria-label="articles dans le panier"
+                    style="display:none;">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       CONTENU PRINCIPAL
+  ============================================================ -->
+  <main id="main-content" tabindex="-1">
+
+    <div class="confirmation-wrapper">
+
+      <!-- Icône succès -->
+      <div class="confirmation-icon" aria-hidden="true" role="presentation">
+        ✓
+      </div>
+
+      <!-- Titre — annoncé automatiquement au chargement de la page -->
+      <h1 class="confirmation-title" id="confirmation-title">
+        Commande confirmée !
+      </h1>
+
+      <p class="confirmation-text">
+        Merci pour votre commande. Nous avons bien reçu votre demande et
+        nous vous enverrons un e-mail de confirmation très prochainement.
+      </p>
+
+      <!-- Numéro de commande — affiché depuis l'URL, jamais stocké -->
+      <div class="order-id-block" role="region" aria-labelledby="order-id-label">
+        <span class="order-id-label" id="order-id-label">
+          Votre numéro de commande
+        </span>
+        <span
+          class="order-id-value"
+          id="order-id-display"
+          aria-live="polite"
+          aria-describedby="order-id-label"
+        >
+          <!-- Injecté par confirmation.js -->
+          Chargement…
+        </span>
+      </div>
+
+      <p class="confirmation-text" style="font-size: 0.95rem;">
+        Conservez ce numéro de commande pour tout suivi ou réclamation.
+      </p>
+
+      <!-- Actions -->
+      <a href="./index.html" class="btn btn-primary" style="margin-right: 1rem;">
+        Retour au catalogue
+      </a>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       PIED DE PAGE
+  ============================================================ -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-logo" aria-label="Kanap">KANAP</span>
+      <nav aria-label="Liens du pied de page">
+        <ul class="footer-links" role="list">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Conditions générales</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <p><small>© <span id="current-year"></span> Kanap. Tous droits réservés.</small></p>
+    </div>
+  </footer>
+
+  <script src="./cart.js"></script>
+  <script src="./confirmation.js"></script>
+
+</body>
+</html>
