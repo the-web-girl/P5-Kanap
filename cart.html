@@ -1,11 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+  ============================================================
+  KANAP — Page panier (cart.html)
+  - Résumé dynamique des articles
+  - Modification de quantité et suppression
+  - Formulaire de commande avec validation
+  Accessibilité : RGAA 4.1
+  Responsive : 320px et +
+  ============================================================
+-->
+<html lang="fr" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+
+  <title>Kanap — Mon panier</title>
+  <meta name="description" content="Vérifiez votre panier et passez votre commande de canapé Kanap personnalisé." />
+  <meta name="robots" content="noindex, nofollow" /><!-- Page transactionnelle, pas à indexer -->
+
+  <meta name="theme-color" content="#1a6e7e" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  
+
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+
+  <div id="sr-announcer"
+       role="status"
+       aria-live="polite"
+       aria-atomic="true"
+       class="sr-only"></div>
+
+  <!-- ============================================================
+       EN-TÊTE
+  ============================================================ -->
+  <header role="banner">
+    <div class="header-inner">
+      <a href="./index.html" class="logo-link" aria-label="Kanap — Retour à l'accueil">
+        <span class="logo-text" aria-hidden="true">KANAP</span>
+      </a>
+      <nav aria-label="Navigation principale">
+        <ul class="main-nav" role="list">
+          <li>
+            <a href="./index.html" class="nav-link">Accueil</a>
+          </li>
+          <li>
+            <a href="./cart.html"
+               class="cart-nav-link active"
+               id="cart-nav-link"
+               aria-label="Panier — vide"
+               aria-current="page">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   aria-hidden="true" focusable="false">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+              Panier
+              <span class="cart-count-badge"
+                    id="cart-count-badge"
+                    aria-label="articles dans le panier"
+                    style="display:none;">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       CONTENU PRINCIPAL
+  ============================================================ -->
+  <main id="main-content" tabindex="-1">
+    <div class="container">
+
+      <h1 class="section-title">Mon panier</h1>
+
+      <!-- ====================================================
+           PARTIE 1 : RÉSUMÉ DES ARTICLES
+      ==================================================== -->
+      <section aria-labelledby="cart-summary-heading">
+
+        <h2 id="cart-summary-heading" class="sr-only">Récapitulatif des articles</h2>
+
+        <!-- Contenu injecté par cart.js -->
+        <div id="cart-items-container" aria-live="polite" aria-atomic="false">
+          <!-- État initial : chargement -->
+          <div id="cart-loading" class="cart-summary">
+            <div class="cart-summary-header">
+              <h2>Articles sélectionnés</h2>
+            </div>
+            <div class="products-loading" aria-live="polite">
+              <div class="loading-spinner" aria-hidden="true"></div>
+              <p>Chargement de votre panier…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barre total — mise à jour dynamiquement -->
+        <div class="cart-total-bar" id="cart-total-bar" aria-live="polite" hidden>
+          <div>
+            <p class="cart-total-label">Total de votre commande</p>
+            <p class="sr-only" id="cart-total-announce"></p>
+          </div>
+          <p class="cart-total-amount" id="cart-total-amount" aria-live="polite">0 €</p>
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           PARTIE 2 : FORMULAIRE DE COMMANDE
+      ==================================================== -->
+      <section aria-labelledby="order-form-heading" id="order-section">
+
+        <div class="order-form-section">
+          <div class="order-form-header">
+            <h2 id="order-form-heading">Passer commande</h2>
+          </div>
+
+          <div class="order-form-body">
+
+            <!-- Note champs obligatoires — RGAA 11.10 -->
+            <p class="required-note">
+              Les champs marqués d'un <span aria-hidden="true">*</span>
+              <span class="sr-only">astérisque</span> sont obligatoires.
+            </p>
+
+            <form
+              id="order-form"
+              novalidate
+              aria-label="Formulaire de commande"
+            >
+
+              <!-- Prénom + Nom sur 2 colonnes (desktop) -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="order-firstName">
+                    Prénom
+                    <span class="required-indicator" aria-hidden="true">*</span>
+                    <span class="sr-only">(obligatoire)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="order-firstName"
+                    name="firstName"
+                    autocomplete="given-name"
+                    required
+                    aria-required="true"
+                    aria-describedby="firstName-error"
+                    placeholder="Jean"
+                    minlength="2"
+                    maxlength="50"
+                  />
+                  <p class="error-message"
+                     id="firstName-error"
+                     role="alert"
+                     aria-live="assertive"
+                     hidden></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="order-lastName">
+                    Nom
+                    <span class="required-indicator" aria-hidden="true">*</span>
+                    <span class="sr-only">(obligatoire)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="order-lastName"
+                    name="lastName"
+                    autocomplete="family-name"
+                    required
+                    aria-required="true"
+                    aria-describedby="lastName-error"
+                    placeholder="Dupont"
+                    minlength="2"
+                    maxlength="50"
+                  />
+                  <p class="error-message"
+                     id="lastName-error"
+                     role="alert"
+                     aria-live="assertive"
+                     hidden></p>
+                </div>
+              </div>
+
+              <!-- Adresse -->
+              <div class="form-group">
+                <label for="order-address">
+                  Adresse de livraison
+                  <span class="required-indicator" aria-hidden="true">*</span>
+                  <span class="sr-only">(obligatoire)</span>
+                </label>
+                <input
+                  type="text"
+                  id="order-address"
+                  name="address"
+                  autocomplete="street-address"
+                  required
+                  aria-required="true"
+                  aria-describedby="address-error"
+                  placeholder="12 rue des Lilas"
+                  maxlength="200"
+                />
+                <p class="error-message"
+                   id="address-error"
+                   role="alert"
+                   aria-live="assertive"
+                   hidden></p>
+              </div>
+
+              <!-- Ville -->
+              <div class="form-group">
+                <label for="order-city">
+                  Ville
+                  <span class="required-indicator" aria-hidden="true">*</span>
+                  <span class="sr-only">(obligatoire)</span>
+                </label>
+                <input
+                  type="text"
+                  id="order-city"
+                  name="city"
+                  autocomplete="address-level2"
+                  required
+                  aria-required="true"
+                  aria-describedby="city-error"
+                  placeholder="Paris"
+                  minlength="2"
+                  maxlength="100"
+                />
+                <p class="error-message"
+                   id="city-error"
+                   role="alert"
+                   aria-live="assertive"
+                   hidden></p>
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="order-email">
+                  Adresse email
+                  <span class="required-indicator" aria-hidden="true">*</span>
+                  <span class="sr-only">(obligatoire)</span>
+                </label>
+                <input
+                  type="email"
+                  id="order-email"
+                  name="email"
+                  autocomplete="email"
+                  required
+                  aria-required="true"
+                  aria-describedby="email-error email-hint"
+                  placeholder="jean.dupont@email.fr"
+                />
+                <p id="email-hint" class="sr-only">
+                  Format attendu : exemple@domaine.fr
+                </p>
+                <p class="error-message"
+                   id="email-error"
+                   role="alert"
+                   aria-live="assertive"
+                   hidden></p>
+              </div>
+
+              <!-- Bouton commander -->
+              <button
+                type="submit"
+                class="btn btn-secondary btn-full"
+                id="btn-order"
+              >
+                Confirmer la commande
+              </button>
+
+              <!-- Erreur globale formulaire -->
+              <div id="form-global-error"
+                   class="alert alert-error"
+                   role="alert"
+                   hidden></div>
+
+            </form>
+          </div>
+        </div>
+
+      </section>
+
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ============================================================
+       PIED DE PAGE
+  ============================================================ -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-logo" aria-label="Kanap">KANAP</span>
+      <nav aria-label="Liens du pied de page">
+        <ul class="footer-links" role="list">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Conditions générales</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <p><small>© <span id="current-year"></span> Kanap. Tous droits réservés.</small></p>
+    </div>
+  </footer>
+
+  <script src="./api.js"></script>
+  <script src="./cart.js"></script>
+  <script src="./validation.js"></script>
+  <script src="./cartPage.js"></script>
+
 </body>
 </html>
