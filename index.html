@@ -1,11 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+  ============================================================
+  KANAP — Page d'accueil (index.html)
+  Affichage dynamique de tous les produits via l'API
+  Accessibilité : RGAA 4.1
+  Responsive : 320px et +
+  SEO : balises meta, structure sémantique, alt images
+  ============================================================
+-->
+<html lang="fr" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+
+  <!-- SEO — RGAA 8.5 : titre de page unique et pertinent -->
+  <title>Kanap — Canapés sur-mesure | Accueil</title>
+  <meta name="description" content="Kanap, votre spécialiste du canapé sur-mesure. Découvrez notre collection exclusive de canapés personnalisables. Livraison offerte." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="./index.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Kanap — Canapés sur-mesure" />
+  <meta property="og:description" content="Découvrez notre collection exclusive de canapés personnalisables." />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Thème couleur navigateur mobile -->
+  <meta name="theme-color" content="#1a6e7e" />
+
+  <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-  
+
+  <!-- Lien d'évitement — RGAA 12.7 -->
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+
+  <!-- Zone d'annonces pour lecteurs d'écran -->
+  <div
+    id="sr-announcer"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    class="sr-only"
+  ></div>
+
+  <!-- ============================================================
+       EN-TÊTE & NAVIGATION
+  ============================================================ -->
+  <header role="banner">
+    <div class="header-inner">
+      <!-- Logo — RGAA 6.1 : lien avec intitulé explicite -->
+      <a href="./index.html" class="logo-link" aria-label="Kanap — Retour à l'accueil">
+        <span class="logo-text" aria-hidden="true">KANAP</span>
+      </a>
+
+      <!-- Navigation principale — RGAA 12.1 -->
+      <nav aria-label="Navigation principale">
+        <ul class="main-nav" role="list">
+          <li>
+            <a href="./index.html"
+               class="nav-link active"
+               aria-current="page">
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a href="./cart.html"
+               class="cart-nav-link"
+               id="cart-nav-link"
+               aria-label="Panier — vide">
+              <!-- Icône panier SVG — RGAA 1.2 : icône décorative aria-hidden -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   aria-hidden="true" focusable="false">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+              Panier
+              <span class="cart-count-badge"
+                    id="cart-count-badge"
+                    aria-label="articles dans le panier"
+                    style="display:none;">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       CONTENU PRINCIPAL
+  ============================================================ -->
+  <main id="main-content" tabindex="-1">
+
+    <!-- Bannière héro -->
+    <section class="hero-banner" aria-labelledby="hero-title">
+      <div class="container">
+        <h1 id="hero-title">Nos canapés sur-mesure</h1>
+        <p>Personnalisez votre canapé selon vos goûts et votre intérieur.
+           Qualité artisanale, confort exceptionnel.</p>
+      </div>
+    </section>
+
+    <!-- Catalogue produits -->
+    <section aria-labelledby="products-heading" class="container">
+      <h2 id="products-heading" class="section-title">Notre collection</h2>
+
+      <!-- Région live : annonce le chargement — RGAA 7.3 -->
+      <div role="status"
+           aria-live="polite"
+           aria-atomic="true"
+           id="products-status"
+           class="sr-only">
+        Chargement des produits en cours…
+      </div>
+
+      <!-- Grille produits — remplie dynamiquement par index.js -->
+      <div class="products-grid"
+           id="products-grid"
+           aria-label="Catalogue de canapés"
+           aria-busy="true"
+           role="list">
+
+        <!-- État de chargement initial -->
+        <div class="products-loading" id="products-loading" aria-hidden="true">
+          <div class="loading-spinner" aria-hidden="true"></div>
+          <p>Chargement des produits…</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       PIED DE PAGE
+  ============================================================ -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-logo" aria-label="Kanap">KANAP</span>
+      <nav aria-label="Liens du pied de page">
+        <ul class="footer-links" role="list">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Conditions générales</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <p>
+        <small>© <span id="current-year"></span> Kanap. Tous droits réservés.</small>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- api.js doit être chargé avant index.js car index.js l'utilise -->
+  <script src="./js/api.js"></script>
+  <script src="./js/cart.js"></script>
+  <script src="./js/index.js"></script>
+
 </body>
 </html>
