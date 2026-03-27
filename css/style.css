@@ -1,0 +1,1066 @@
+:root {
+  /* Couleurs principales */
+  --color-primary: #1a6e7e;        /* Bleu-vert Kanap */
+  --color-primary-dark: #135a6a;
+  --color-primary-light: #e8f4f6;
+  --color-secondary: #f4a261;      /* Orange accent */
+  --color-secondary-dark: #e07b3a;
+
+  /* Neutres */
+  --color-bg: #f9f9f9;
+  --color-white: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-muted: #5a5a72;
+  --color-border: #d0d5dd;
+  --color-border-focus: #1a6e7e;
+
+  /* États */
+  --color-error: #c0392b;
+  --color-error-bg: #fdf0ef;
+  --color-success: #1a7e4e;
+  --color-success-bg: #edf7f2;
+
+  /* Typographie */
+  --font-main: 'Segoe UI', Arial, Helvetica, sans-serif;
+  --font-size-base: 1rem;          /* 16px — minimum RGAA */
+  --line-height-base: 1.6;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2.25rem;
+
+  /* Espacements */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-pad: clamp(1rem, 4vw, 2rem);
+  --radius: 8px;
+  --radius-lg: 16px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+
+  /* Focus RGAA — anneau de focus visible et contrasté */
+  --focus-outline: 3px solid #f4a261;
+  --focus-offset: 3px;
+}
+
+/* ============================================================
+   2. RESET MINIMAL
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Respect des préférences de mouvement réduit — RGAA 13.8 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+html {
+  font-size: 100%; /* 16px base — ne jamais descendre sous 16px RGAA 10.4 */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol { list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; font-size: inherit; }
+
+/* ============================================================
+   3. ACCESSIBILITÉ — RGAA
+   ============================================================ */
+
+/* Lien d'évitement — RGAA 12.7 : lien d'accès rapide au contenu principal */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 10000;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: 0 0 var(--radius) var(--radius);
+  text-decoration: underline;
+  font-size: var(--font-size-base);
+}
+.skip-link:focus {
+  top: 0;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+
+/* Contenu masqué visuellement mais accessible aux lecteurs d'écran — RGAA */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible sur tous les éléments interactifs — RGAA 10.7 */
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+  border-radius: 3px;
+}
+/* Supprimer uniquement pour les clics souris */
+:focus:not(:focus-visible) { outline: none; }
+
+/* Contraste texte — RGAA 3.2 : ratio minimum 4.5:1 pour le texte normal */
+/* Toutes les couleurs de texte sur fond blanc/clair respectent ce ratio */
+
+/* ============================================================
+   4. LAYOUT — CONTENEUR & GRILLE
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+main {
+  flex: 1;
+  padding: var(--space-8) 0;
+}
+
+/* ============================================================
+   5. HEADER & NAVIGATION
+   ============================================================ */
+header {
+  background: var(--color-white);
+  border-bottom: 3px solid var(--color-primary);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* Logo */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+.logo-link:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius);
+}
+
+.logo-text {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Navigation principale */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nav-link {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text);
+  border-radius: var(--radius);
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  position: relative;
+}
+.nav-link:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.nav-link.active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: var(--space-4);
+  right: var(--space-4);
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* Panier dans le nav */
+.cart-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.cart-nav-link:hover {
+  background: var(--color-primary-dark);
+  color: var(--color-white);
+  text-decoration: none;
+}
+.cart-count-badge {
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+/* ============================================================
+   6. HERO BANNER (page d'accueil)
+   ============================================================ */
+.hero-banner {
+  background: linear-gradient(135deg, var(--color-primary) 60%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+  padding: var(--space-12) 0;
+  text-align: center;
+  margin-bottom: var(--space-10);
+}
+
+.hero-banner h1 {
+  font-size: clamp(var(--font-size-2xl), 5vw, var(--font-size-3xl));
+  font-weight: 800;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+.hero-banner p {
+  font-size: var(--font-size-lg);
+  opacity: 0.92;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   7. SECTION TITRES
+   ============================================================ */
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-3);
+  border-bottom: 3px solid var(--color-primary-light);
+}
+
+/* ============================================================
+   8. GRILLE DE PRODUITS — Page d'accueil
+   ============================================================ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+/* Carte produit */
+.product-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Lien carte — RGAA 6.1 : lien avec intitulé explicite */
+.product-card-link {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+}
+.product-card-link:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-lg);
+}
+
+.product-card-image-wrapper {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--color-primary-light);
+}
+.product-card-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.product-card:hover .product-card-image-wrapper img {
+  transform: scale(1.04);
+}
+
+.product-card-body {
+  padding: var(--space-5);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.product-card-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.product-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  flex: 1;
+  /* Tronquer à 3 lignes */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card-price {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* État vide/chargement */
+.products-loading,
+.products-empty {
+  text-align: center;
+  padding: var(--space-16);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   9. PAGE PRODUIT
+   ============================================================ */
+.product-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
+  margin-bottom: var(--space-12);
+}
+
+.product-image-container {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: var(--color-primary-light);
+}
+.product-image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Breadcrumb — RGAA 12.6 : plan de navigation cohérent */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+.breadcrumb a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.breadcrumb a:hover {
+  text-decoration: none;
+}
+.breadcrumb-separator {
+  color: var(--color-border);
+  font-weight: bold;
+}
+.breadcrumb [aria-current="page"] {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.product-title {
+  font-size: clamp(var(--font-size-xl), 3vw, var(--font-size-3xl));
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.product-price {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.product-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+/* Formulaire ajout au panier */
+.product-form {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  border: 2px solid var(--color-primary-light);
+}
+
+/* ============================================================
+   10. COMPOSANTS FORMULAIRE — Réutilisables
+   ============================================================ */
+
+/* Groupe de champ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Labels — RGAA 11.1 : chaque champ doit avoir un label explicite */
+label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}
+label .required-indicator {
+  color: var(--color-error);
+  margin-left: var(--space-1);
+  aria-hidden: true; /* Texte explicite fourni en SR-only */
+}
+
+/* Champs de saisie */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s;
+  /* Taille min touché 44x44px — RGAA 10.8 */
+  min-height: 44px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--color-border-focus);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+
+/* État erreur sur les champs */
+input[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
+/* Select personnalisé */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a6e7e' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Messages d'erreur — RGAA 11.11 */
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: 1.4em;
+}
+.error-message::before {
+  content: '⚠';
+  flex-shrink: 0;
+  font-size: 1em;
+  margin-top: 0.1em;
+}
+.error-message:empty {
+  display: none;
+}
+.error-message[hidden] {
+  display: none;
+}
+
+/* ============================================================
+   11. BOUTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+  text-decoration: none;
+  /* Taille min 44x44px — RGAA */
+  min-height: 44px;
+  min-width: 44px;
+  line-height: 1;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-white);
+  border-color: var(--color-secondary);
+  font-size: var(--font-size-lg);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-lg);
+}
+.btn-secondary:hover {
+  background: var(--color-secondary-dark);
+  border-color: var(--color-secondary-dark);
+  color: var(--color-white);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+.btn-danger:hover {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.btn-full { width: 100%; }
+
+/* ============================================================
+   12. PAGE PANIER
+   ============================================================ */
+
+/* Résumé panier */
+.cart-summary {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: var(--space-8);
+}
+
+.cart-summary-header {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--space-5) var(--space-6);
+}
+.cart-summary-header h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Article du panier */
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-image-wrapper {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-primary-light);
+  aspect-ratio: 1;
+}
+.cart-item-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.cart-item-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+}
+.cart-item-color {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+.cart-item-color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.cart-item-price {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.cart-item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+/* Input quantité dans le panier */
+.cart-item-qty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-end;
+}
+.cart-item-qty label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+.cart-item-qty input {
+  width: 80px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--font-size-base);
+}
+
+/* Pied de panier — total */
+.cart-total-bar {
+  background: var(--color-primary-light);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+.cart-total-label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+.cart-total-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* Panier vide */
+.cart-empty-message {
+  text-align: center;
+  padding: var(--space-16);
+  color: var(--color-text-muted);
+}
+.cart-empty-message p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-6);
+}
+
+/* ============================================================
+   13. FORMULAIRE DE COMMANDE
+   ============================================================ */
+.order-form-section {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: var(--space-12);
+}
+
+.order-form-header {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--space-5) var(--space-6);
+}
+.order-form-header h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+.order-form-body {
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Grille 2 colonnes pour firstName/lastName */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+/* Indicateur de champ requis */
+.required-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+.required-note span {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+/* ============================================================
+   14. PAGE CONFIRMATION
+   ============================================================ */
+.confirmation-wrapper {
+  text-align: center;
+  padding: var(--space-16) var(--container-pad);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.confirmation-icon {
+  width: 96px;
+  height: 96px;
+  background: var(--color-success-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-8);
+  font-size: 3rem;
+}
+
+.confirmation-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-success);
+  margin-bottom: var(--space-5);
+}
+
+.confirmation-text {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+}
+
+.order-id-block {
+  background: var(--color-primary-light);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-8);
+  margin: var(--space-6) 0 var(--space-8);
+  display: inline-block;
+}
+.order-id-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  display: block;
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.order-id-value {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-primary);
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   15. FOOTER
+   ============================================================ */
+footer {
+  background: var(--color-text);
+  color: rgba(255,255,255,0.85);
+  padding: var(--space-8) 0;
+  margin-top: auto;
+}
+.footer-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+}
+.footer-logo {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-white);
+}
+.footer-links {
+  display: flex;
+  gap: var(--space-6);
+}
+.footer-links a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer-links a:hover { color: var(--color-white); }
+
+/* ============================================================
+   16. ALERTES ET NOTIFICATIONS
+   ============================================================ */
+.alert {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  border-left: 4px solid;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-4);
+  role: alert;
+}
+.alert-error {
+  background: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: #7a1c14;
+}
+.alert-success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success);
+  color: #0f5132;
+}
+
+/* ============================================================
+   17. RESPONSIVE — BREAKPOINTS
+   ============================================================ */
+
+/* Tablette ≤ 900px */
+@media (max-width: 900px) {
+  .product-page {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  .cart-item {
+    grid-template-columns: 80px 1fr;
+  }
+  .cart-item-actions {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Mobile ≤ 600px */
+@media (max-width: 600px) {
+  .header-inner {
+    padding: var(--space-3) var(--space-4);
+  }
+  .logo-text { font-size: var(--font-size-xl); }
+
+  .main-nav {
+    gap: var(--space-1);
+    flex-wrap: wrap;
+  }
+  .nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+    gap: var(--space-4);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item {
+    grid-template-columns: 70px 1fr;
+    gap: var(--space-3);
+  }
+  .cart-item-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .cart-total-bar {
+    padding: var(--space-4) var(--space-5);
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .order-form-body { padding: var(--space-5); }
+
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; flex-wrap: wrap; gap: var(--space-4); }
+}
+
+/* Très petit mobile : 320px */
+@media (max-width: 380px) {
+  :root { --container-pad: var(--space-3); }
+  .products-grid { grid-template-columns: 1fr; }
+  .hero-banner { padding: var(--space-8) 0; }
+  .cart-item {
+    grid-template-columns: 1fr;
+  }
+  .cart-item-image-wrapper {
+    width: 80px;
+  }
+}
+
+/* ============================================================
+   18. IMPRESSION
+   ============================================================ */
+@media print {
+  header, footer, .breadcrumb, .product-form,
+  .btn, nav { display: none !important; }
+  body { background: white; color: black; }
+  .product-page { grid-template-columns: 1fr; }
+}
